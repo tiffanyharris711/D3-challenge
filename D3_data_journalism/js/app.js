@@ -1,4 +1,4 @@
-csvData = "assets/data/data.csv"
+csvData = "data/data.csv"
 
 //============Set up chart=====================
 var svgWidth = 960;
