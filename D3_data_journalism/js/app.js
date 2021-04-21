@@ -1,7 +1,7 @@
 csvData = "data/data.csv"
 
 //============Set up chart=====================
-var svgWidth = 960;
+var svgWidth = 800;
 var svgHeight = 500;
 
 var margin = {

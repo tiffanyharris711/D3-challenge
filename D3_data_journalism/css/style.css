@@ -44,3 +44,46 @@ body {
   font-size: 14px;
   font-weight: bold;
 }
+
+
+.axis-text {
+  font-family: sans-serif;
+  font-weight: bold;
+  fill: #551aaf;
+  text-anchor: middle;
+}
+
+.active {
+  font-weight: bold;
+  fill: #000;
+  fill: #551aaf;
+  transition: fill 0.3s ease-out;
+  text-anchor: middle;
+}
+
+.inactive {
+  font-weight: lighter;
+  fill: #551aaf;
+  transition: fill 0.3s ease-out;
+  text-anchor: middle;
+}
+
+.inactive:hover {
+  fill: #e75480;
+  cursor: pointer;
+}
+
+
+.tooltip {
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  padding: 2px;
+  padding-top: 8px;
+  font: 12px sans-serif;
+  color: blue;
+  text-align: center;
+  background: cyan;
+  border: 0;
+  border-radius: 10px;
+}
