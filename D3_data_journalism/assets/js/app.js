@@ -1,100 +1,91 @@
-// Variables    
+csvData = "assets/data/data.csv"
+
+//============Set up chart=====================
+var svgWidth = 960;
+var svgHeight = 500;
+
 var margin = {
   top: 20,
   right: 40,
   bottom: 60,
   left: 50
-}
+};
 
-svgW = 960;
-svgH = 500;
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
 
-var h = svgH - margin.top - margin.bottom
-var w = svgW - margin.left - margin.right
+// ====Create an SVG wrapper,append an SVG group that will hold chart and set margins=====
+  var svg = d3
+    .select("#scatter")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
 
-// Scatter, svg
-var scatter = d3.select('#scatter')
-  .append("svg")
-  .attr("width", svgW)
-  .attr("height", svgH);
+  var chartGroup = svg.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Group
-var group = scatter.append("g")
-  .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
-
-
-d3.csv('assets/data/data.csv').then(function (data) {
-    
-    data.forEach(function(data) {
+// ==========Import and format the data to numerical values =======================
+  d3.csv(csvData).then(function(CensusData) {
+    CensusData.forEach(function(data) {
       data.poverty = +data.poverty;
       data.healthcare = +data.healthcare;
-    });
-      // Scales
-    var xScale = d3.scaleLinear()
-      .domain(d3.extent(data, d => d.poverty))
-      .range([0,w])
-      // .nice();
+  });
 
-    var yScale = d3.scaleLinear()
-      .domain([6,d3.max(data, d => d.healthcare)])
-      .range([h,0]);
+// ==============Create Scales====================
+  const xScale = d3.scaleLinear()
+    // .domain([8,d3.max(CensusData, d => d.poverty)])
+    .domain(d3.extent(CensusData, d => d.poverty))
+    .range([0, width])
+    .nice(); 
 
-    // X-axis
-    var xAxis = d3.axisBottom(xScale);
-        
-    // Y-axis
-      var yAxis = d3.axisLeft(yScale);
-      
-    group.append("g").attr("transform", `translate(0, ${h})`).call(xAxis);
-    group.append("g").call(yAxis);
+  const yScale = d3.scaleLinear()
+    // .domain([0,d3.max(CensusData, d => d.healthcare)])
+    .domain(d3.extent(CensusData, d => d.healthcare))
+    .range([height, 0])
+    .nice();
+  
+// =============Create Axes=========================
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale);
 
-    // Circles
-    var circles = group.selectAll('circle')
-      .data(data)
-      .enter()
-      .append('circle')
-      .attr('cx',d => xScale(d.healthcare))
-      .attr('cy',d => yScale(d.poverty))
-      .attr('r','10')
-      .attr('fill','lightblue')
-      .classed("stateCircle",true)
-      .attr("opacity", 0.75);
-      // .on('mouseover', function () {
-      //   d3.select(this)
-      //     .transition()
-      //     .duration(500)
-      //     .attr('r',20)
-      // })
-      // .on('mouseout', function () {
-      //   d3.select(this)
-      //     .transition()
-      //     .duration(400)
-      //     .attr('r',10)
-      // })
-    // .append('title') // Tooltip
-    //   .text(function (d) { return d.state +
-    //                         '\nHealthcare: ' + d.poverty +
-    //                         '\nPoverty: ' + d.healthcare })
-    // X-axis
-    group.attr('class','axis')
-        .attr('transform', 'translate(0,' + h + ')')
-        .call(xAxis)
-      .append('text') // X-axis Label
-        .attr('class','label')
-        .attr('y',30)
-        .attr('x',170)
-        .attr('dy','.71em')
-        // .style('text-anchor','center')
-        .text('In Poverty (%)')
-    // Y-axis
-    group.attr('class', 'axis')
-        .call(yAxis)
-      .append('text') // y-axis Label
-        .attr('class','label')
-        .attr('transform','rotate(-90)')
-        .attr('x',-270)
-        .attr('y',-40)
-        // .attr('dy','.71em')
-        // .style('text-anchor','end')
-        .text('Lacks Healthcare (%)')
-  })
+// ============Append axes to the chartGroup==========
+  chartGroup.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
+  chartGroup.append("g").call(yAxis);
+
+//============Generate scatter plot=========
+  chartGroup.selectAll("circle")
+  .data(CensusData)
+  .enter()
+  .append("circle")
+  .attr("cx", d=>xScale(d.poverty))
+  .attr("cy", d=>yScale(d.healthcare))
+  .attr("r", "11")
+  .classed("stateCircle", true)
+  .attr("opacity", 0.75);
+
+//============add texts to each datapoint=========
+  chartGroup.append("g")
+    .selectAll('text')
+    .data(CensusData)
+    .enter()
+    .append("text")
+    .text(d=>d.abbr)
+    .attr("x",d=>xScale(d.poverty))
+    .attr("y",d=>yScale(d.healthcare))
+    .classed("stateText", true);
+  
+//============add axes titles=========
+  chartGroup.append("text")
+    .attr("transform", `translate(${width/2}, ${height + margin.top + 20})`)
+    .classed("axis", true)
+    .text("In Poverty (%)");
+
+  chartGroup.append("text")
+    .attr("y", 0 - ((margin.left / 2) + 15))
+    .attr("x", 0 - (height / 2))
+    .classed("axis", true)
+    .attr("transform", "rotate(-90)")
+    .text("Lacks Healthcare (%)");
+  }).catch(function(error) {
+    console.log(error);
+  });

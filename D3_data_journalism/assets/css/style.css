@@ -29,3 +29,18 @@ body {
   margin: 0;
   font-size: 16px;
 }
+
+.stateText {
+  font-family: sans-serif;
+  text-anchor: middle;
+  fill: white;
+  font-size: 10px;
+  font-weight: bold;
+  alignment-baseline: central;
+}
+
+.axis {
+  text-anchor: middle;
+  font-size: 14px;
+  font-weight: bold;
+}
