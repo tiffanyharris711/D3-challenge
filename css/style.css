@@ -56,9 +56,14 @@ body {
 .active {
   font-weight: bold;
   fill: #000;
-  fill: #551aaf;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
+}
+
+.activeY {
+  font-weight: bold;
+  fill: #000;
+  transition: fill 0.3s ease-out;
 }
 
 .inactive {
@@ -66,6 +71,12 @@ body {
   fill: #551aaf;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
+}
+
+.inactiveY {
+  font-weight: lighter;
+  fill: #551aaf;
+  transition: fill 0.3s ease-out;
 }
 
 .inactive:hover {

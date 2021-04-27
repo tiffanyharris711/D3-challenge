@@ -121,13 +121,13 @@ function updateToolTip(chosenXAxis, chosenYaxis, circlesGroup) {
   }
 
   if (chosenYAxis === "healthcare") {
-    label = "Healthcare:";
+    labelY = "Healthcare:";
   }
   else if (chosenYAxis === "smokes") {
-    label = "Smokes:";
+    labelY = "Smokes:";
   }
   else {
-    label ="Obesity:";
+    labelY ="Obesity:";
   }
 
   var toolTip = d3.tip()
@@ -246,25 +246,26 @@ d3.csv(csvData).then(function(CensusData, err) {
   var healthcareLabel = yLabelsGroup.append("text")
     .attr("y", 0 - ((margin.left / 2) - 15 ))
     .attr("x", 0 - (height / 1.5))
-    .classed("axis", true)
+    .classed("activeY", true)
+    .attr("font-weight", "bold")
     .attr("transform", "rotate(-90)")
     .text("Lacks Healthcare (%)");
   
   var smokesLabel = yLabelsGroup.append("text")
     .attr("y", 0 - ((margin.left / 2) + 2))
     .attr("x", 0 - (height / 1.9))
-    .classed("axis", true)
+    .classed("inactiveY", true)
     .attr("transform", "rotate(-90)")
     .text("Smokes");
 
   var obesityLabel = yLabelsGroup.append("text")
     .attr("y", 0 - ((margin.left / 2) + 20))
     .attr("x", 0 - (height / 1.9))
-    .classed("axis", true)
+    .classed("inactiveY", true)
     .attr("transform", "rotate(-90)")
     .text("Obesity");
 
-  // updateToolTip function above csv import
+  // updateToolTip function 
   var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
   // x axis labels event listener
@@ -328,7 +329,7 @@ d3.csv(csvData).then(function(CensusData, err) {
         }
       }
     });
-    // x axis labels event listener
+    // y axis labels event listener
   yLabelsGroup.selectAll("text")
   .on("click", function() {
     // get value of selection
@@ -355,37 +356,37 @@ d3.csv(csvData).then(function(CensusData, err) {
 
       // changes classes to change bold text
       if (chosenYAxis === "healthcare") {
-        healthLabel
-          .classed("active", true)
-          .classed("inactive", false);
+        healthcareLabel
+          .classed("activeY", true)
+          .classed("inactiveY", false);
         smokesLabel
-          .classed("active", false)
-          .classed("inactive", true); 
+          .classed("activeY", false)
+          .classed("inactiveY", true); 
         obesityLabel
-          .classed("active", false)
-          .classed("inactive", true);
+          .classed("activeY", false)
+          .classed("inactiveY", true);
       }
       else if (chosenXAxis === "smokes") {
-        healthLabel
-          .classed("active", false)
-          .classed("inactive", true);
+        healthcareLabel
+          .classed("activeY", false)
+          .classed("inactiveY", true);
         smokesLabel
-          .classed("active", true)
-          .classed("inactive", false); 
+          .classed("activeY", true)
+          .classed("inactiveY", false); 
         obesityLabel
-          .classed("active", false)
-          .classed("inactive", true);
+          .classed("activeY", false)
+          .classed("inactiveY", true);
       }
       else {
-        healthLabel
-          .classed("active", false)
-          .classed("inactive", true);
+        healthcareLabel
+          .classed("activeY", false)
+          .classed("inactiveY", true);
         smokesLabel
-          .classed("active", false)
-          .classed("inactive", true); 
+          .classed("activeY", false)
+          .classed("inactiveY", true); 
         obesityLabel
-          .classed("active", true)
-          .classed("inactive", false);
+          .classed("activeY", true)
+          .classed("inactiveY", false);
       }
     }
   });
